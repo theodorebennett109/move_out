@@ -5,7 +5,7 @@ import Nav from "@/Components/Nav.vue";
 </script>
 
 <template>
-    <div>
+    <div class="bg-white">
         <Nav />
         <!-- Body -->
         <div class="p-4">

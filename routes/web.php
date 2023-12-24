@@ -144,4 +144,9 @@ Route::get('/create', function (){
     return Inertia::render('CreateRental');
 })->name('create');
 
+
+Route::post('/store', function (){
+    dd(request()->all());
+})->name('store');
+
 require __DIR__.'/auth.php';

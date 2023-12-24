@@ -1,5 +1,4 @@
 <script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import { Head } from "@inertiajs/vue3";
 const props = defineProps(["carRentals"]);
@@ -16,6 +15,15 @@ function formatDate(dateString) {
     const options = { month: "short", day: "numeric", year: "numeric" };
     return new Date(dateString).toLocaleDateString("en-US", options);
 }
+
+function dateDifference(startDate, endDate) {
+    let start = new Date(startDate);
+    let end = new Date(endDate);
+    var difference = end - start;
+    // Calculate the difference in days, hours, minutes and seconds
+    var days = Math.floor(difference / 1000 / 60 / 60 / 24);
+    return days;
+}
 </script>
 
 <template>
@@ -25,6 +33,16 @@ function formatDate(dateString) {
         <h2 class="my-3 text-xl font-semibold leading-tight text-gray-800">
             Dashboard
         </h2>
+        <div>
+            <a href="/create">
+                <button
+                    class="h-12 my-3 text-sm font-semibold text-white bg-blue-600 rounded button px-7 -blue-1"
+                >
+                    Make Rental
+                </button>
+            </a>
+        </div>
+
         <!-- Table -->
         <div class="border rounded-md">
             <table class="table table-striped">
@@ -43,9 +61,43 @@ function formatDate(dateString) {
                 <tbody>
                     <tr v-for="(carRental, index) in carRentals" :key="index">
                         <td>
-                            <p class="text-blue-600 cursor-pointer">
+                            <p
+                                class="text-blue-600 cursor-pointer hover:underline"
+                                data-bs-toggle="dropdown"
+                            >
                                 {{ carRental.person.name }}
                             </p>
+
+                            <div
+                                class="p-2 text-xs font-semibold dropdown-menu"
+                                style="max-width: 200px"
+                            >
+                                <p class="text-sm text-center">
+                                    {{ carRental.person.name }}
+                                </p>
+                                <hr class="my-2" />
+                                <div>
+                                    <div class="my-2">
+                                        <p class="text-sm">Email:</p>
+                                        <span class="text-blue-600">{{
+                                            carRental.person.email
+                                        }}</span>
+                                    </div>
+
+                                    <div class="my-2">
+                                        <p class="text-sm">Phone Number:</p>
+                                        <span class="text-blue-600">{{
+                                            carRental.person.number
+                                        }}</span>
+                                    </div>
+                                    <div class="my-2">
+                                        <p class="text-sm">Address:</p>
+                                        <span class="text-blue-600">{{
+                                            carRental.person.address
+                                        }}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
 
                         <td>{{ carRental.carModel }}</td>
@@ -53,7 +105,18 @@ function formatDate(dateString) {
                         <td>{{ formatDate(carRental.endDate) }}</td>
 
                         <td>{{ formatNumber(carRental.ratePerDay) }}</td>
-                        <td>{{ formatNumber(carRental.total) }}</td>
+                        <td>
+                            {{
+                                formatNumber(
+                                    carRental.ratePerDay *
+                                        dateDifference(
+                                            carRental.startDate,
+                                            carRental.endDate
+                                        )
+                                )
+                            }}
+                        </td>
+
                         <td>
                             <p
                                 v-if="carRental.status == 'Pending'"

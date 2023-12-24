@@ -1,7 +1,7 @@
 <template>
     <nav class="bg-black navbar">
         <div class="container-fluid">
-            <a class="flex items-center gap-2 text-white navbar-brand" href="#">
+            <a class="flex items-center gap-2 text-white navbar-brand" href="/">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"

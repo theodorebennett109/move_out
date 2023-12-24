@@ -1,8 +1,22 @@
 <script setup>
 import DefaultLayout from "@/Layouts/DefaultLayout.vue";
-import { Head } from "@inertiajs/vue3";
+import { Head, router } from "@inertiajs/vue3";
 import SubmitButton from "@/Components/SubmitButton.vue";
 const props = defineProps(["carRentals"]);
+
+let form = {
+    first_name: null,
+    last_name: null,
+    email: null,
+    tel_no: null,
+    start_date: null,
+    end_date: null,
+    car_model: null,
+};
+
+function submit() {
+    router.post(route("store"), form);
+}
 </script>
 
 <template>
@@ -12,8 +26,7 @@ const props = defineProps(["carRentals"]);
         <!-- First name -->
         <div class="flex justify-center bg-white">
             <form
-                method="POST"
-                action="/store"
+                @submit.prevent="submit"
                 class="flex flex-col w-full gap-6 sm:w-3/4"
             >
                 <!-- Name -->
@@ -21,7 +34,7 @@ const props = defineProps(["carRentals"]);
                     <div class="w-full sm:w-1/2">
                         <label for="" class="mb-2 font-bold">First Name</label>
                         <input
-                            name="firstname"
+                            v-model="form.first_name"
                             type="text"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
                         />
@@ -30,7 +43,7 @@ const props = defineProps(["carRentals"]);
                     <div class="w-full sm:w-1/2">
                         <label for="" class="mb-2 font-bold">Last Name</label>
                         <input
-                            name="lastname"
+                            v-model="form.last_name"
                             type="text"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
                         />
@@ -43,7 +56,7 @@ const props = defineProps(["carRentals"]);
                             >Email Address</label
                         >
                         <input
-                            name="email"
+                            v-model="form.email"
                             type="text"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
                         />
@@ -56,7 +69,7 @@ const props = defineProps(["carRentals"]);
                             >Telephone Number</label
                         >
                         <input
-                            name="number"
+                            v-model="form.tel_no"
                             type="text"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
                         />
@@ -79,7 +92,7 @@ const props = defineProps(["carRentals"]);
                     <div class="w-1/2">
                         <label for="" class="mb-2 font-bold">Start Date</label>
                         <input
-                            name="start_date"
+                            v-model="form.start_date"
                             type="date"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
                         />
@@ -90,7 +103,7 @@ const props = defineProps(["carRentals"]);
                     <div class="w-1/2">
                         <label for="" class="mb-2 font-bold">End Date</label>
                         <input
-                            name="end_date"
+                            v-model="form.end_date"
                             type="date"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
                         />
@@ -103,7 +116,7 @@ const props = defineProps(["carRentals"]);
                     <div class="col-lg-4">
                         <label for="" class="mb-2 font-bold">Car Model</label>
                         <select
-                            name="car_model"
+                            v-model="form.car_model"
                             type=""
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
                         >

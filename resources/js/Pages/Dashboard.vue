@@ -1,6 +1,7 @@
 <script setup>
-import GuestLayout from "@/Layouts/GuestLayout.vue";
+import DefaultLayout from "@/Layouts/DefaultLayout.vue";
 import { Head } from "@inertiajs/vue3";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 const props = defineProps(["carRentals"]);
 
 function formatNumber(value) {
@@ -29,17 +30,13 @@ function dateDifference(startDate, endDate) {
 <template>
     <Head title="Dashboard" />
 
-    <GuestLayout>
+    <DefaultLayout>
         <h2 class="my-3 text-xl font-semibold leading-tight text-gray-800">
             Dashboard
         </h2>
         <div>
             <a href="/create">
-                <button
-                    class="h-12 my-3 text-sm font-semibold text-white bg-blue-600 rounded button px-7 -blue-1"
-                >
-                    Make Rental
-                </button>
+                <PrimaryButton> Add Car Rental </PrimaryButton>
             </a>
         </div>
 
@@ -187,5 +184,5 @@ function dateDifference(startDate, endDate) {
                 </tbody>
             </table>
         </div>
-    </GuestLayout>
+    </DefaultLayout>
 </template>

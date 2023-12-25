@@ -55,6 +55,7 @@ function dateDifference(startDate, endDate) {
                         <th scope="col">Total</th>
                         <th scope="col">Status</th>
                         <th scope="col">Invoice No.</th>
+                        <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody v-if="carRentals && carRentals.length">
@@ -88,7 +89,7 @@ function dateDifference(startDate, endDate) {
                                     <div class="my-2">
                                         <p class="text-sm">Phone Number:</p>
                                         <span class="text-blue-600">{{
-                                            carRental.number
+                                            carRental.tel_no
                                         }}</span>
                                     </div>
                                     <div class="my-2">
@@ -101,33 +102,25 @@ function dateDifference(startDate, endDate) {
                             </div>
                         </td>
 
-                        <td>{{ carRental.carModel }}</td>
+                        <td>{{ carRental.car_model.model }}</td>
                         <td v-if="carRental.start_date">
                             {{ formatDate(carRental.start_date) }}
                         </td>
-                        <td v-if="carRental.endDate">
+                        <td v-if="carRental.end_date">
                             {{ formatDate(carRental.end_date) }}
                         </td>
 
-                        <td>{{ formatNumber(carRental.carModel.rate) }}</td>
+                        <td>{{ carRental.car_model.rate }}</td>
                         <td>
-                            {{
-                                formatNumber(
-                                    carRental.carModel.rate *
-                                        dateDifference(
-                                            carRental.start_date,
-                                            carRental.end_date
-                                        )
-                                )
-                            }}
+                            {{ carRental.total }}
                         </td>
 
-                        <!-- <td>
+                        <td>
                             <p
-                                v-if="carRental.status == 'Pending'"
+                                v-if="carRental.status == null"
                                 class="inline-flex items-center gap-1 px-2 py-1 text-xs font-extrabold text-yellow-500 bg-yellow-100 rounded-full"
                             >
-                                {{ carRental.status }}
+                                Pending
                                 <span>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -144,10 +137,10 @@ function dateDifference(startDate, endDate) {
                                 </span>
                             </p>
                             <p
-                                v-if="carRental.status == 'Approved'"
+                                v-if="carRental.status == 1"
                                 class="inline-flex items-center gap-1 px-2 py-1 text-xs font-extrabold text-green-600 bg-green-100 rounded-full"
                             >
-                                {{ carRental.status }}
+                                Approved
                                 <span>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -164,10 +157,10 @@ function dateDifference(startDate, endDate) {
                                 </span>
                             </p>
                             <p
-                                v-if="carRental.status == 'Completed'"
+                                v-if="carRental.status == 3"
                                 class="inline-flex items-center gap-1 px-2 py-1 text-xs font-extrabold text-blue-600 bg-blue-100 rounded-full"
                             >
-                                {{ carRental.status }}
+                                Completed
                                 <span>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -186,7 +179,9 @@ function dateDifference(startDate, endDate) {
                                     </svg>
                                 </span>
                             </p>
-                        </td> -->
+                        </td>
+                        <td>{{ carRental.invoice_no }}</td>
+
                         <td>{{ carRental.invoice_no }}</td>
                     </tr>
                 </tbody>

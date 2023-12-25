@@ -9,9 +9,12 @@ class CarRental extends Model
 {
     use HasFactory;
     protected $table = 'car-rental';
-    protected $guard = []; 
+    protected $guarded = []; 
 
-    function carModel(){
-        return $this->hasOne(CarModel::class,'model', "car_model");
-    }
+// CarRental.php (or your model file)
+public function carModel()
+{
+    return $this->belongsTo(CarModel::class, 'car_model', 'model');
+}
+
 }

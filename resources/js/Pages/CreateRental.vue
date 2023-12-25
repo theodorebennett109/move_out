@@ -18,7 +18,7 @@ let form = ref({
 });
 
 function submit() {
-    router.post(route("store"), form);
+    router.post(route("store"), form.value);
 }
 
 const carRate = computed(

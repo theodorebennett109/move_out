@@ -138,7 +138,7 @@ use Inertia\Inertia;
 
 
     Route::get('/', function ()  {
-        $carRentals = CarRental::all();
+        $carRentals = CarRental::with('carModel')->get();
     return Inertia::render('Dashboard',['carRentals' => $carRentals]);
 })->name('dashboard');
 
@@ -151,12 +151,13 @@ Route::get('/create', function (){
 
 Route::post('/store', function (){
     $carRental = request()->all();
-
+    // dd($carRental);
     CarRental::create([
         'first_name' => $carRental["first_name"],
         'last_name' => $carRental["last_name"],
         'address' => $carRental["address"],
         'email' => $carRental["email"],
+        'tel_no'=>$carRental["tel_no"],
         'car_model' => $carRental["car_model"],
         'start_date' => $carRental["start_date"],
         'end_date' => $carRental["end_date"],
@@ -164,6 +165,8 @@ Route::post('/store', function (){
     ]
 
     );
+
+    return to_route('dashboard');
 })->name('store');
 
 require __DIR__.'/auth.php';

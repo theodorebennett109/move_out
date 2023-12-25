@@ -2,8 +2,10 @@
 import DefaultLayout from "@/Layouts/DefaultLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import { computed } from "vue";
 const props = defineProps(["carRentals"]);
 
+// console.log(props.carRentals);
 function formatNumber(value) {
     // Format the number with two decimal places and a comma as a thousands separator
     return Number(value).toLocaleString("en-US", {
@@ -55,14 +57,15 @@ function dateDifference(startDate, endDate) {
                         <th scope="col">Invoice No.</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="carRentals && carRentals.length">
                     <tr v-for="(carRental, index) in carRentals" :key="index">
                         <td>
                             <p
                                 class="text-blue-600 cursor-pointer hover:underline"
                                 data-bs-toggle="dropdown"
                             >
-                                {{ carRental.person.name }}
+                                {{ carRental.first_name }}
+                                {{ carRental.last_name }}
                             </p>
 
                             <div
@@ -70,27 +73,28 @@ function dateDifference(startDate, endDate) {
                                 style="max-width: 200px"
                             >
                                 <p class="text-sm text-center">
-                                    {{ carRental.person.name }}
+                                    {{ carRental.first_name }}
+                                    {{ carRental.last_name }}
                                 </p>
                                 <hr class="my-2" />
                                 <div>
                                     <div class="my-2">
                                         <p class="text-sm">Email:</p>
                                         <span class="text-blue-600">{{
-                                            carRental.person.email
+                                            carRental.email
                                         }}</span>
                                     </div>
 
                                     <div class="my-2">
                                         <p class="text-sm">Phone Number:</p>
                                         <span class="text-blue-600">{{
-                                            carRental.person.number
+                                            carRental.number
                                         }}</span>
                                     </div>
                                     <div class="my-2">
                                         <p class="text-sm">Address:</p>
                                         <span class="text-blue-600">{{
-                                            carRental.person.address
+                                            carRental.address
                                         }}</span>
                                     </div>
                                 </div>
@@ -98,23 +102,27 @@ function dateDifference(startDate, endDate) {
                         </td>
 
                         <td>{{ carRental.carModel }}</td>
-                        <td>{{ formatDate(carRental.startDate) }}</td>
-                        <td>{{ formatDate(carRental.endDate) }}</td>
+                        <td v-if="carRental.start_date">
+                            {{ formatDate(carRental.start_date) }}
+                        </td>
+                        <td v-if="carRental.endDate">
+                            {{ formatDate(carRental.end_date) }}
+                        </td>
 
-                        <td>{{ formatNumber(carRental.ratePerDay) }}</td>
+                        <td>{{ formatNumber(carRental.carModel.rate) }}</td>
                         <td>
                             {{
                                 formatNumber(
-                                    carRental.ratePerDay *
+                                    carRental.carModel.rate *
                                         dateDifference(
-                                            carRental.startDate,
-                                            carRental.endDate
+                                            carRental.start_date,
+                                            carRental.end_date
                                         )
                                 )
                             }}
                         </td>
 
-                        <td>
+                        <!-- <td>
                             <p
                                 v-if="carRental.status == 'Pending'"
                                 class="inline-flex items-center gap-1 px-2 py-1 text-xs font-extrabold text-yellow-500 bg-yellow-100 rounded-full"
@@ -178,8 +186,8 @@ function dateDifference(startDate, endDate) {
                                     </svg>
                                 </span>
                             </p>
-                        </td>
-                        <td>{{ carRental.invoiceNo }}</td>
+                        </td> -->
+                        <td>{{ carRental.invoice_no }}</td>
                     </tr>
                 </tbody>
             </table>

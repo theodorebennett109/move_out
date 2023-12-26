@@ -64,6 +64,7 @@ watchEffect(() => {
                     <div class="w-full sm:w-1/2">
                         <label for="" class="mb-2 font-bold">First Name</label>
                         <input
+                            required
                             v-model="form.first_name"
                             type="text"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
@@ -73,6 +74,7 @@ watchEffect(() => {
                     <div class="w-full sm:w-1/2">
                         <label for="" class="mb-2 font-bold">Last Name</label>
                         <input
+                            required
                             v-model="form.last_name"
                             type="text"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
@@ -86,6 +88,7 @@ watchEffect(() => {
                             >Email Address</label
                         >
                         <input
+                            required
                             v-model="form.email"
                             type="text"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
@@ -99,6 +102,7 @@ watchEffect(() => {
                             >Telephone Number</label
                         >
                         <input
+                            required
                             v-model="form.tel_no"
                             type="text"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
@@ -110,6 +114,7 @@ watchEffect(() => {
                     <div class="w-full">
                         <label for="" class="mb-2 font-bold">Address</label>
                         <input
+                            required
                             v-model="form.address"
                             type="text"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
@@ -122,6 +127,7 @@ watchEffect(() => {
                     <div class="w-1/2">
                         <label for="" class="mb-2 font-bold">Start Date</label>
                         <input
+                            required
                             v-model="form.start_date"
                             type="date"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
@@ -133,6 +139,7 @@ watchEffect(() => {
                     <div class="w-1/2">
                         <label for="" class="mb-2 font-bold">End Date</label>
                         <input
+                            required
                             v-model="form.end_date"
                             type="date"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
@@ -184,6 +191,7 @@ watchEffect(() => {
                 <div v-if="carRate" class="w-full">
                     <label for="" class="mb-2 font-bold">Total</label>
                     <input
+                        required
                         v-model="form.total"
                         type="text"
                         class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"

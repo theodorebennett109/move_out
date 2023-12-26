@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\ProfileController;
+use App\Mail\MyEmail;
 use App\Models\CarModel;
 use App\Models\CarRental;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -138,7 +142,11 @@ use Inertia\Inertia;
 
 
     Route::get('/', function ()  {
+        
+        // return $email->sendEmail('test','test@gmail.com');  
         $carRentals = CarRental::with('carModel')->get();
+        
+
     return Inertia::render('Dashboard',['carRentals' => $carRentals]);
 })->name('dashboard');
 
@@ -149,24 +157,43 @@ Route::get('/create', function (){
 })->name('create');
 
 
-Route::post('/store', function (){
-    $carRental = request()->all();
-    // dd($carRental);
-    CarRental::create([
-        'first_name' => $carRental["first_name"],
-        'last_name' => $carRental["last_name"],
-        'address' => $carRental["address"],
-        'email' => $carRental["email"],
-        'tel_no'=>$carRental["tel_no"],
-        'car_model' => $carRental["car_model"],
-        'start_date' => $carRental["start_date"],
-        'end_date' => $carRental["end_date"],
-        'total' => $carRental["total"],
-    ]
+use Illuminate\Support\Facades\Validator;
 
-    );
+Route::post('/store', function () {
+    try {
+        // Validate the request data
+        $validator = Validator::make(request()->all(), [
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'tel_no' => 'required|string|max:20',
+            'car_model' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+            'total' => 'required|numeric',
+        ]);
 
-    return to_route('dashboard');
+        // Check if validation fails
+        if ($validator->fails()) {
+            return back()->withInput()->withErrors($validator);
+        }
+
+        // Validation passed, proceed to create CarRental
+        $carRentalData = request()->all();
+        $carRental = CarRental::create($carRentalData);
+
+        // Send email
+        $emailController = new EmailController();
+        $emailController->sendPaymentRequestEmail($carRental);
+
+        return redirect()->route('dashboard');
+    } catch (\Exception $e) {
+        Log::error($e->getMessage());
+        // Handle the exception or log it appropriately
+        return back()->withInput()->withErrors(['error' => 'An error occurred while processing the request.']);
+    }
 })->name('store');
+
 
 require __DIR__.'/auth.php';

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CarRentalController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\ProfileController;
 use App\Mail\MyEmail;
@@ -21,15 +22,6 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-// Route::get('/', function () {
-//     return Inertia::render('Welcome', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// });
 
 
 // $carRentals = [
@@ -141,59 +133,13 @@ use Inertia\Inertia;
 // ];
 
 
-    Route::get('/', function ()  {
-
-        // return $email->sendEmail('test','test@gmail.com');
-        $carRentals = CarRental::with('carModel')->get();
+Route::get('/', [CarRentalController::class,'index'])->name('dashboard');
 
 
-    return Inertia::render('Dashboard',['carRentals' => $carRentals]);
-})->name('dashboard');
+Route::get('/create', [CarRentalController::class, 'create'])->name('create');
 
 
-Route::get('/create', function (){
-    $models = CarModel::all();
-    return Inertia::render('CreateRental',['models' => $models]);
-})->name('create');
-
-
-use Illuminate\Support\Facades\Validator;
-
-Route::post('/store', function () {
-    try {
-        // Validate the request data
-        $validator = Validator::make(request()->all(), [
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'tel_no' => 'required|string|max:20',
-            'car_model' => 'required|string|max:255',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
-            'total' => 'required|numeric|gt:0',
-        ]);
-
-        // Check if validation fails
-        if ($validator->fails()) {
-            return back()->withInput()->withErrors($validator);
-        }
-
-        // Validation passed, proceed to create CarRental
-        $carRentalData = request()->all();
-        $carRental = CarRental::create($carRentalData);
-
-        // Send email
-        $emailController = new EmailController();
-        $emailController->sendPaymentRequestEmail($carRental);
-
-        return redirect()->route('dashboard');
-    } catch (\Exception $e) {
-        Log::error($e->getMessage());
-        // Handle the exception or log it appropriately
-        return back()->withInput()->withErrors(['error' => 'An error occurred while processing the request.']);
-    }
-})->name('store');
+Route::post('/store',[CarRentalController::class,'store'])->name('store');
 
 
 require __DIR__.'/auth.php';

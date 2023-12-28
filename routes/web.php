@@ -142,10 +142,10 @@ use Inertia\Inertia;
 
 
     Route::get('/', function ()  {
-        
-        // return $email->sendEmail('test','test@gmail.com');  
+
+        // return $email->sendEmail('test','test@gmail.com');
         $carRentals = CarRental::with('carModel')->get();
-        
+
 
     return Inertia::render('Dashboard',['carRentals' => $carRentals]);
 })->name('dashboard');
@@ -171,7 +171,7 @@ Route::post('/store', function () {
             'car_model' => 'required|string|max:255',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
-            'total' => 'required|numeric',
+            'total' => 'required|numeric|gt:0',
         ]);
 
         // Check if validation fails

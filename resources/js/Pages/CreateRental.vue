@@ -3,7 +3,7 @@ import DefaultLayout from "@/Layouts/DefaultLayout.vue";
 import { Head, router } from "@inertiajs/vue3";
 import SubmitButton from "@/Components/SubmitButton.vue";
 import { computed, ref, watchEffect } from "vue";
-const props = defineProps(["carRentals", "models"]);
+const props = defineProps(["carRentals", "models", "errors"]);
 
 let form = ref({
     first_name: null,
@@ -21,12 +21,21 @@ function submit() {
     router.post(route("store"), form.value);
 }
 
+// Validation errors
+let errors = ref(props.errors);
+const formErrors = computed(() => {
+    return props.errors;
+});
+
+// adjust the rate based on car model
 const carRate = computed(
     () =>
         props.models?.filter(
             (rental) => form.value.car_model == rental.model
         )[0]?.rate
 );
+
+// Adjust total based on difference between start and end dates and the car model
 const calTotal = computed(
     () =>
         dateDifference(form.value.start_date, form.value.end_date) *
@@ -51,7 +60,6 @@ watchEffect(() => {
 
 <template>
     <Head title="Create Rental" />
-
     <DefaultLayout>
         <!-- First name -->
         <div class="flex justify-center bg-white">
@@ -69,6 +77,11 @@ watchEffect(() => {
                             type="text"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
                         />
+                        <div v-if="formErrors.first_name">
+                            <p class="mt-2 text-xs font-semibold text-red-600">
+                                {{ formErrors.first_name }}
+                            </p>
+                        </div>
                     </div>
 
                     <div class="w-full sm:w-1/2">
@@ -79,6 +92,11 @@ watchEffect(() => {
                             type="text"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
                         />
+                        <div v-if="formErrors.last_name">
+                            <p class="mt-2 text-xs font-semibold text-red-600">
+                                {{ formErrors.last_name }}
+                            </p>
+                        </div>
                     </div>
                 </div>
 
@@ -93,6 +111,11 @@ watchEffect(() => {
                             type="text"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
                         />
+                        <div v-if="formErrors.email">
+                            <p class="mt-2 text-xs font-semibold text-red-600">
+                                {{ formErrors.email }}
+                            </p>
+                        </div>
                     </div>
 
                     <!-- number -->
@@ -107,6 +130,11 @@ watchEffect(() => {
                             type="text"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
                         />
+                        <div v-if="formErrors.tel_no">
+                            <p class="mt-2 text-xs font-semibold text-red-600">
+                                {{ formErrors.tel_no }}
+                            </p>
+                        </div>
                     </div>
                 </div>
 
@@ -119,6 +147,11 @@ watchEffect(() => {
                             type="text"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
                         />
+                        <div v-if="formErrors.address">
+                            <p class="mt-2 text-xs font-semibold text-red-600">
+                                {{ formErrors.address }}
+                            </p>
+                        </div>
                     </div>
                 </div>
 
@@ -132,6 +165,12 @@ watchEffect(() => {
                             type="date"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
                         />
+                        <!-- start date error -->
+                        <div v-if="formErrors.start_date">
+                            <p class="mt-2 text-xs font-semibold text-red-600">
+                                {{ formErrors.start_date }}
+                            </p>
+                        </div>
                     </div>
 
                     <!-- End -->
@@ -144,6 +183,12 @@ watchEffect(() => {
                             type="date"
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
                         />
+                        <!-- end date error -->
+                        <div v-if="formErrors.end_date">
+                            <p class="mt-2 text-xs font-semibold text-red-600">
+                                {{ formErrors.end_date }}
+                            </p>
+                        </div>
                     </div>
                 </div>
 
@@ -159,7 +204,6 @@ watchEffect(() => {
 
                         <select
                             v-model="form.car_model"
-                            type=""
                             class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
                         >
                             <option value="" disabled selected>
@@ -173,6 +217,11 @@ watchEffect(() => {
                                 {{ model.model }}
                             </option>
                         </select>
+                        <div v-if="formErrors.car_model">
+                            <p class="mt-2 text-xs font-semibold text-red-600">
+                                {{ formErrors.car_model }}
+                            </p>
+                        </div>
                     </div>
 
                     <div class="flex items-center w-full sm:w-1/2">
@@ -196,6 +245,12 @@ watchEffect(() => {
                         type="text"
                         class="w-full h-12 px-3 font-medium rounded sm:h-16 text focus:ring-0"
                     />
+                    <!-- error for total -->
+                    <div v-if="formErrors.total">
+                        <p class="mt-2 text-xs font-semibold text-red-600">
+                            {{ formErrors.total }}
+                        </p>
+                    </div>
                 </div>
                 <div class="flex justify-center">
                     <SubmitButton>Submit</SubmitButton>
